@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Özel Yetenek — Vize Çalışma Notları</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0e0c;
+    --surface: #1a1814;
+    --card: #201e1b;
+    --border: #2e2b26;
+    --accent: #c9a84c;
+    --accent2: #7fb3a0;
+    --accent3: #c47b6e;
+    --text: #e8e0d0;
+    --muted: #8a8070;
+    --tag-bg: #2a2620;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.6;
+  }
+
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 3rem 2rem 2rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  header::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: 50%;
+    transform: translateX(-50%);
+    width: 400px; height: 200px;
+    background: radial-gradient(ellipse, rgba(201,168,76,0.12), transparent 70%);
+    pointer-events: none;
+  }
+
+  .header-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.75rem;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1.1;
+    background: linear-gradient(135deg, #e8d5a3, var(--accent), #c9a84c);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 0.5rem;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+  }
+
+  /* Progress bar */
+  .progress-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--border);
+    z-index: 100;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+
+  /* Nav */
+  nav {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: rgba(15,14,12,0.95);
+    backdrop-filter: blur(12px);
+    z-index: 50;
+  }
+
+  .nav-btn {
+    padding: 0.4rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 2rem;
+    background: transparent;
+    color: var(--muted);
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.03em;
+  }
+  .nav-btn:hover, .nav-btn.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(201,168,76,0.06);
+  }
+
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem 6rem;
+  }
+
+  /* Section */
+  .section {
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+  .section.visible { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    color: var(--accent);
+    margin: 2.5rem 0 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .date-tag {
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.65rem;
+    font-weight: 400;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: var(--tag-bg);
+    border: 1px solid var(--border);
+    padding: 0.2rem 0.6rem;
+    border-radius: 3px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.4rem 1.6rem;
+    margin-bottom: 1rem;
+    transition: border-color 0.2s;
+    position: relative;
+  }
+  .card:hover { border-color: #3e3b35; }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--accent2);
+    margin-bottom: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .card p, .card li {
+    font-size: 0.88rem;
+    line-height: 1.75;
+    color: #c4bba8;
+  }
+
+  .card ul { padding-left: 1.2rem; }
+  .card li { margin-bottom: 0.2rem; }
+
+  .highlight {
+    color: var(--accent);
+    font-weight: 600;
+  }
+
+  .important {
+    background: rgba(201,168,76,0.07);
+    border-left: 3px solid var(--accent);
+    padding: 0.8rem 1rem;
+    border-radius: 0 6px 6px 0;
+    margin: 0.8rem 0;
+    font-size: 0.86rem;
+    color: var(--text);
+  }
+
+  .warning {
+    background: rgba(196,123,110,0.08);
+    border-left: 3px solid var(--accent3);
+    padding: 0.8rem 1rem;
+    border-radius: 0 6px 6px 0;
+    margin: 0.8rem 0;
+    font-size: 0.86rem;
+    color: #d9c0bc;
+  }
+
+  /* Flashcards */
+  .flashcard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 1rem;
+  }
+
+  .flashcard {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.4rem;
+    cursor: pointer;
+    min-height: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+    perspective: 600px;
+  }
+
+  .flashcard:hover { border-color: var(--accent2); transform: translateY(-2px); }
+
+  .fc-front, .fc-back {
+    transition: opacity 0.3s;
+  }
+
+  .fc-back {
+    display: none;
+    background: rgba(127,179,160,0.05);
+  }
+
+  .flashcard.flipped .fc-front { display: none; }
+  .flashcard.flipped .fc-back { display: block; }
+  .flashcard.flipped { border-color: var(--accent2); }
+
+  .fc-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.5rem;
+  }
+
+  .fc-question {
+    font-family: 'Playfair Display', serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  .fc-answer {
+    font-size: 0.82rem;
+    line-height: 1.7;
+    color: var(--accent2);
+  }
+
+  .fc-hint {
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-top: 0.8rem;
+    font-style: italic;
+  }
+
+  /* Quiz */
+  .quiz-container { max-width: 640px; margin: 0 auto; }
+
+  .quiz-question {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .quiz-q-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    line-height: 1.5;
+    margin-bottom: 1.2rem;
+    color: var(--text);
+  }
+
+  .quiz-q-num {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+
+  .quiz-options { display: flex; flex-direction: column; gap: 0.5rem; }
+
+  .quiz-option {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--surface);
+    color: #c4bba8;
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.85rem;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.15s;
+    line-height: 1.5;
+  }
+  .quiz-option:hover:not(:disabled) { border-color: var(--accent2); color: var(--text); }
+  .quiz-option.correct { border-color: var(--accent2); background: rgba(127,179,160,0.12); color: var(--accent2); }
+  .quiz-option.wrong { border-color: var(--accent3); background: rgba(196,123,110,0.1); color: var(--accent3); }
+
+  .quiz-feedback {
+    margin-top: 0.8rem;
+    font-size: 0.82rem;
+    padding: 0.6rem 0.8rem;
+    border-radius: 5px;
+    display: none;
+  }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.ok { background: rgba(127,179,160,0.1); color: var(--accent2); }
+  .quiz-feedback.no { background: rgba(196,123,110,0.1); color: var(--accent3); }
+
+  .quiz-score {
+    text-align: center;
+    padding: 2rem;
+    background: var(--card);
+    border: 1px solid var(--accent);
+    border-radius: 8px;
+    display: none;
+  }
+  .quiz-score.show { display: block; }
+  .score-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    color: var(--accent);
+  }
+
+  .btn {
+    padding: 0.7rem 1.8rem;
+    background: transparent;
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.85rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.05em;
+    margin-top: 1rem;
+  }
+  .btn:hover { background: rgba(201,168,76,0.1); }
+
+  /* Timeline */
+  .timeline { position: relative; padding-left: 2rem; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--accent), var(--accent2), transparent);
+  }
+
+  .tl-item {
+    position: relative;
+    margin-bottom: 2rem;
+    padding-left: 1rem;
+  }
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -2rem; top: 0.3rem;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg);
+  }
+
+  .tl-date {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.3rem;
+  }
+
+  .tl-content {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.2rem;
+    font-size: 0.85rem;
+    line-height: 1.7;
+    color: #c4bba8;
+  }
+
+  /* Model diagram */
+  .model-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.4rem;
+    margin-bottom: 1rem;
+    text-align: center;
+  }
+
+  .venn {
+    display: flex;
+    justify-content: center;
+    gap: -2rem;
+    margin: 1rem 0;
+    flex-wrap: wrap;
+  }
+
+  .venn-circle {
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-align: center;
+    padding: 1rem;
+    line-height: 1.4;
+    margin: -20px;
+    border: 2px solid;
+  }
+
+  .vc1 { background: rgba(201,168,76,0.15); border-color: rgba(201,168,76,0.4); color: var(--accent); }
+  .vc2 { background: rgba(127,179,160,0.15); border-color: rgba(127,179,160,0.4); color: var(--accent2); }
+  .vc3 { background: rgba(196,123,110,0.15); border-color: rgba(196,123,110,0.4); color: var(--accent3); }
+
+  .venn-center {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: rgba(201,168,76,0.25);
+    border: 2px solid var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: var(--accent);
+    text-align: center;
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%,-50%);
+  }
+
+  .venn-wrap { position: relative; display: flex; justify-content: center; align-items: center; min-height: 180px; }
+
+  /* BILSEM Steps */
+  .steps { display: flex; gap: 0; flex-wrap: wrap; }
+  .step-item {
+    flex: 1;
+    min-width: 140px;
+    padding: 1rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    text-align: center;
+    position: relative;
+  }
+  .step-item:not(:last-child)::after {
+    content: '→';
+    position: absolute;
+    right: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--accent);
+    z-index: 1;
+  }
+  .step-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    color: var(--accent);
+    font-weight: 900;
+    display: block;
+  }
+  .step-text { font-size: 0.75rem; color: var(--muted); margin-top: 0.3rem; line-height: 1.4; }
+
+  /* Search */
+  .search-bar {
+    width: 100%;
+    padding: 0.8rem 1.2rem;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'Source Serif 4', serif;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-bar:focus { border-color: var(--accent); }
+  .search-bar::placeholder { color: var(--muted); }
+
+  /* Scroll to top */
+  .back-top {
+    position: fixed;
+    bottom: 2rem; right: 2rem;
+    width: 40px; height: 40px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    color: var(--muted);
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+  }
+  .back-top:hover { border-color: var(--accent); color: var(--accent); }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } .venn-wrap { flex-direction: column; } }
+
+  .tag {
+    display: inline-block;
+    background: var(--tag-bg);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.1rem 0.5rem;
+    border-radius: 3px;
+    margin-right: 0.3rem;
+    margin-bottom: 0.3rem;
+  }
+  .tag.gold { border-color: rgba(201,168,76,0.4); color: var(--accent); }
+  .tag.teal { border-color: rgba(127,179,160,0.4); color: var(--accent2); }
+</style>
+</head>
+<body>
+
+<div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+<header>
+  <div class="header-label">Özel Eğitim · Vize Çalışma Materyali</div>
+  <h1>Özel Yetenek<br>Ders Notları</h1>
+  <p class="subtitle">09.02.2026 — 16.03.2026 · İnteraktif Çalışma Rehberi</p>
+</header>
+
+<nav>
+  <button class="nav-btn active" onclick="show('notlar')">📚 Ders Notları</button>
+  <button class="nav-btn" onclick="show('kuramcilar')">🧠 Kuramcılar</button>
+  <button class="nav-btn" onclick="show('modeller')">🔵 Modeller</button>
+  <button class="nav-btn" onclick="show('flashcard')">🃏 Flashcard</button>
+  <button class="nav-btn" onclick="show('quiz')">✏️ Mini Quiz</button>
+  <button class="nav-btn" onclick="show('ozet')">📋 Özet Tablo</button>
+</nav>
+
+<main>
+
+<div class="section visible" id="sec-notlar">
+
+  <input class="search-bar" placeholder="🔍 Konularda ara..." id="searchInput" oninput="filterCards()">
+
+  <div class="section-title"><span>🧠</span> BÖLÜM 1: ZEKÂ KURAMLARI VE DETAYLI KAVRAMLARI</div>
+
+  <div class="card" data-tags="piaget bilişsel gelişim kuramı şema özümleme uyumsama">
+    <div class="card-title">🌱 1. Jean Piaget (Bilişsel Gelişim Kuramı)</div>
+    <p>Piaget zekâyı, biyolojik ve mantıksal süreçlerle açıklanan bir <strong>"bilme yetisi"</strong> ve çevreye uyum sağlama süreci olarak tanımlar.</p>
+    <ul>
+      <li><span class="highlight">Şema:</span> Bireyin nesneleri, durumları ve olayları sınıflandırmak ve dünyayı anlamlandırmak için kullandığı zihinsel bilişsel kalıplardır.</li>
+      <li><span class="highlight">Özümleme (Asimilasyon):</span> Bilginin içselleştirilmesidir; bireyin karşılaştığı yeni bir durumu zihninde hali hazırda var olan şemalarla açıklaması sürecidir.</li>
+      <li><span class="highlight">Uyumsama (Akodomasyon):</span> Yeni karşılaşılan bilgiler ışığında, bireyin mevcut şemasını değiştirmesi ve yeni nesne için tamamen yeni bir şema oluşturmasıdır.</li>
+    </ul>
+  </div>
+
+  <div class="card" data-tags="guilford zekâ yapısı kuramı içerik ürün işlemler yakınsak ıraksak">
+    <div class="card-title">🎯 2. J. P. Guilford (Zekâ Yapısı Kuramı)</div>
+    <p>Zihinsel kabiliyetleri birbirinden bağımsız 3 temel kategoriye ayırır: <strong>İçerik</strong> (biçimsel, sembolik vb.), <strong>Ürün</strong> (sınıflar, ilişkiler vb.) ve <strong>İşlemler</strong> (hafıza, değerlendirme vb.).</p>
+    <ul>
+      <li><span class="highlight">Yakınsak (Convergent) Düşünme:</span> Bir probleme doğru ve tek bir cevabı bulmaya yönelik uygulanan mantıksal, analitik düşünme sürecidir.</li>
+      <li><span class="highlight">Iraksak (Divergent) Düşünme:</span> Bir probleme mantıklı, özgün ve birden fazla yaratıcı çözüm üretme sürecidir.</li>
+    </ul>
+  </div>
+
+  <div class="card" data-tags="sternberg üçlü zekâ analitik yaratıcı pratik">
+    <div class="card-title">🔺 3. Robert Sternberg (Üçlü Zekâ Kuramı)</div>
+    <p>Zekâyı bilgi işleyici üç büyük bileşene ayırmaktadır.</p>
+    <ul>
+      <li><span class="highlight">Analitik Zekâ:</span> Problemleri analiz etme, karşılaştırma ve mantıksal akıl yürütme becerisidir. Kendi içinde planlama/izleme (metabilişsel), problem çözme adımları (performans) ve bilgi edinme süreçlerinden oluşur.</li>
+      <li><span class="highlight">Yaratıcı Zekâ:</span> Yeni durumlarla baş etme, yeni çözümler üretme, icat etme ve otomatikleşmiş işlemleri etkili kullanma kapasitesidir.</li>
+      <li><span class="highlight">Pratik Zekâ:</span> Bireyin sahip olduğu yetenekleri bulunduğu çevrede başarmak için doğru zamanda kullanması, yani fikirleri uygulamaya dönüştürme becerisidir.</li>
+    </ul>
+  </div>
+
+  <div class="card" data-tags="thurstone grup faktör kuramı hafıza kodlama hatırlama">
+    <div class="card-title">🔢 4. Thurstone (Grup Faktör Kuramı)</div>
+    <p>Zekâyı 7 bağımsız zihinsel yetenekle (Sözel anlama, sözel akıcılık, sayılar, kavrama hızı, tümevarımsal muhakeme, görsel-uzamsal algılama, hafıza) açıklar.</p>
+    <div class="important">
+      Hafıza bileşenini ise hafızaya alma işlemi olan <strong>kodlama</strong> ve gereken bilgiyi geri çağırma işlemi olan <strong>hatırlama</strong> olarak ikiye ayırır.
+    </div>
+  </div>
+
+  <div class="card" data-tags="gardner çoklu zeka genetik">
+    <div class="card-title">🎨 5. Howard Gardner (Çoklu Zekâ Kuramı)</div>
+    <p>Gardner'a göre bireylerin belli bir alana yönelik kapasiteleri özellikle çok yüksekken başka bir alanda o kadar yüksek olmayabilir. Zekânın evrimsel biyolojide yeri olmalıdır (genetik temeli bulunmalıdır). Zekâ türleri deneysel psikolojik görevlerle diğer zekâ türlerinden ayırt edilebilir olmalıdır.</p>
+  </div>
+
+
+  <div class="section-title"><span>🌟</span> BÖLÜM 2: ÜSTÜN YETENEK KURAMLARI VE KAVRAMLARI</div>
+
+  <div class="card" data-tags="renzulli üçlü halka üstün yetenek yaratıcılık göreve bağlılık motivasyon">
+    <div class="card-title">⭕ 1. Renzulli (Üçlü Halka Modeli)</div>
+    <p>Üstün yeteneklilik üç temel boyutun kesişimiyle ortaya çıkar:</p>
+    <ul>
+      <li><span class="highlight">Ortalama üstü yetenek:</span> Doğuştan gelen genel ve özel zekâ.</li>
+      <li><span class="highlight">Göreve bağlılık:</span> Motivasyon, sebat, yüksek çalışma disiplini.</li>
+      <li><span class="highlight">Yaratıcılık</span></li>
+    </ul>
+    <div class="warning">
+      Renzulli'ye göre sadece üstün zekâ yeterli değildir; sorumluluk ve azim (motivasyon) aktif olmazsa zekâ zamanla körelir.
+    </div>
+  </div>
+
+  <div class="card" data-tags="gagne ayrımsal üstün zeka yetenek katalizör şans">
+    <div class="card-title">🧬 2. Gagne (Ayrımsal Üstün Zekâ ve Üstün Yetenek Kuramı)</div>
+    <ul>
+      <li><span class="highlight">Üstün Zekâ:</span> Eğitilmemiş, akranları arasında en üst %10'da yer alan biyolojik temelli doğal yeteneklerdir.</li>
+      <li><span class="highlight">Üstün Yetenek:</span> Doğal potansiyelin bir öğrenme süreciyle sistematik olarak geliştirilmiş halidir ve yine insan etkinliğinin en üst %10'unu temsil eder.</li>
+      <li><span class="highlight">Katalizörler:</span> Bireyin yetenek gelişimini artıran veya engelleyen değişkenlerdir. İrade, motivasyon gibi bireysel katalizörler ile çevre, aile, sosyoekonomik düzey gibi çevresel katalizörlere ayrılır. Tepkimeyi başlatan tetikleyicilerdir.</li>
+      <li><span class="highlight">Şans:</span> Bireyin doğduğu çevre, ailesi ve öğretmeni gibi çevresel katalizörlerin hepsini birden etkileyen en belirleyici faktördür.</li>
+    </ul>
+  </div>
+
+  <div class="card" data-tags="uğur sak bulanık kuram yatkınlık uyaran etkileşim">
+    <div class="card-title">🌫️ 3. Uğur Sak (Bulanık Kuram)</div>
+    <p>Üstün yeteneği sınırları net olmayan bulutsu bir yapı olarak açıklar. Üç temel kavram üzerine inşa edilmiştir:</p>
+    <ul>
+      <li><span class="highlight">Yatkınlıklar:</span> Zihinsel olan (muhakeme) veya zihinsel olmayan (ilgi) doğuştan gelen potansiyellerdir.</li>
+      <li><span class="highlight">Uyaranlar:</span> Potansiyeli harekete geçiren nesne, kişi veya çevresel koşullardır.</li>
+      <li><span class="highlight">Etkileşim:</span> Yatkınlıkların çevresel uyaranlarla karşılaşıp dönüşüme girdiği, üstün yeteneğin bizzat açığa çıktığı süreçtir.</li>
+    </ul>
+  </div>
+
+  <div class="card" data-tags="tannenbaum yıldız modeli katlayıcı matthew statik dinamik">
+    <div class="card-title">⭐ 4. Tannenbaum (Yıldız Modeli)</div>
+    <p>Üstün yeteneğin çocuklukta bir potansiyel olduğunu, ancak gerekli tüm koşullar uygun olduğunda yetişkinlikte performansa dönüşeceğini savunur. Yıldızın 5 ucu (bileşeni) aynı anda bulunmalıdır: Genel yetenek, özel yetenek, zihinsel olmayan faktörler (adanmışlık, dayanıklılık), şans ve çevresel faktörler.</p>
+    <ul>
+      <li><span class="highlight">Katlayıcı Etki (Matthew Etkisi):</span> Çevrenin önemini vurgulayan bu kavrama göre birey, genetik yeteneğine ve çevre olanaklarına ne kadar çok yatırım yaparsa, yetenek düzeyi de o oranda katlanarak artış gösterir.</li>
+      <li><span class="highlight">Dinamik ve Statik Faktörler:</span> Bileşenler statik (fiziksel yapı gibi değişmez) ve dinamik (okul değişikliği gibi değişebilir) özellikler gösterir ve hiçbir bileşen bir diğerinin eksikliğini telafi edemez.</li>
+    </ul>
+  </div>
+
+
+  <div class="section-title"><span>🎨</span> BÖLÜM 3: EĞİTİMDE FARKLILAŞTIRMA VE MODELLERİ</div>
+
+  <div class="card" data-tags="farklılaştırma içerik süreç ürün ortam">
+    <div class="card-title">🎯 Farklılaştırmanın Temel Boyutları</div>
+    <p>Farklılaştırma, öğrencinin öğrenme ihtiyaçlarına ve ilgilerine göre öğretimin seviyesinin uyarlanmasıdır ve 4 temel boyutta gerçekleştirilir:</p>
+    <ol style="padding-left:1.4rem; font-size:0.87rem; line-height:2; color:#c4bba8">
+      <li><strong>İçerik Farklılaştırması:</strong> Öğretilen bilginin karmaşıklığının ve derinliğinin artırılması.</li>
+      <li><strong>Süreç Farklılaştırması:</strong> Bilginin "nasıl" öğrenildiğinin (araştırma projeleri, deneysel çalışmalar vb.) değiştirilmesi.</li>
+      <li><strong>Ürün Farklılaştırması:</strong> Öğrencinin öğrenme süreci sonunda oluşturduğu çıktının (prototip, makale vb.) farklılaştırılması.</li>
+      <li><strong>Öğrenme Ortamı Farklılaştırması:</strong> Sınıf ortamının çalışma alanlarına göre uyarlanması.</li>
+    </ol>
+    <p style="margin-top:0.8rem;">Farklılaştırma uygulanırken kullanılan temel modeller; Paralel Müfredat, Müfredat Sıkıştırma, Okul Çapında Zenginleştirme, Otonom Öğrenme, Maker, Purdue Üç-Evre, ÜYEP ve Izgara modelleridir.</p>
+  </div>
+
+  <div class="card" data-tags="ızgara müfredat modeli tema entegre">
+    <div class="card-title">🧩 1. Izgara Müfredat Modeli</div>
+    <p>İçerik, süreç ve ürün bileşenlerinin birbirlerinden izole edilmeden, birbirleriyle entegre edilerek (birleştirilerek) öğretilmesini sağlayan bir yaklaşımdır. Bu modelde, bu üç bileşenin en tepesine bir <strong>"Tema"</strong> (örneğin "Güç" teması) yerleştirilir.</p>
+    <div class="important">
+      Tema, süreçteki tüm öğrenme organizasyonunu sağlar ve öğrencinin konuya daha bütünsel bir bakış açısı geliştirmesine zemin hazırlar.
+    </div>
+  </div>
+
+  <div class="card" data-tags="paralel müfredat çekirdek bağlantılar uygulamalar kimliğe duyarlılık">
+    <div class="card-title">📚 2. Paralel Müfredatlar Modeli (Dört Alt Boyutu)</div>
+    <p>Üst düzey, kavram odaklı ve karmaşık yapılara odaklanan 4 aşamadan meydana gelir.</p>
+    <ul>
+      <li><span class="highlight">Çekirdek Müfredatı (Core Curriculum):</span> Özgün bir eğitimin başlangıç noktasıdır. Disipline dair ilke, kavram ve becerilerin inşa edildiği, ezberden uzaklaşarak anlamanın ve eleştirel düşüncenin teşvik edildiği çerçevedir.</li>
+      <li><span class="highlight">Bağlantılar Müfredatı (Curriculum of Connections):</span> Öğrencilerin farklı olgular ve kavramlar arasındaki bağlantıları anlamlandırdığı, bir konunun ekonomik/teknolojik şartlardan nasıl etkilendiğini kavradığı ve çoklu bakış açıları geliştirerek yeni hipotezler ürettiği aşamadır.</li>
+      <li><span class="highlight">Uygulamalar Müfredatı (Curriculum of Practice):</span> Disiplin içerisindeki gerçek metodolojilerin bir "uzman" gibi uygulanması aşamasıdır. Öğrencinin gerçek dünya sorunlarını çözdüğü, deney tasarladığı, verileri analiz edip yorumladığı pratik süreçtir.</li>
+      <li><span class="highlight">Kimliğe Duyarlılık Müfredatı (Curriculum of Identity):</span> Disiplinin değerlerinin, öğrencinin kendi kişisel uzmanlıkları, ilgileri ve güçlü yanlarıyla bağdaştırıldığı son evredir. Öğrenci, disiplinin dünyadaki olumlu/olumsuz etkilerini inceler, kendi yaratıcılığının o alana etkisini görerek bir gurur ve tevazu geliştirir.</li>
+    </ul>
+  </div>
+
+
+  <div class="section-title"><span>🏫</span> BÖLÜM 4: EĞİTİM STRATEJİLERİ VE DİĞER ÖNEMLİ KAVRAMLAR</div>
+
+  <div class="card" data-tags="gruplama homojen heterojen">
+    <div class="card-title">👥 Gruplama</div>
+    <p>Bilişsel özelliklere ve öğrenme hızlarına göre yapılır.</p>
+    <ul>
+      <li><span class="highlight">Homojen gruplama:</span> Üstün yeteneklilerin kendi aralarında birleşmesi (tam zamanlı özel sınıf veya yarı zamanlı kaynak oda).</li>
+      <li><span class="highlight">Heterojen gruplama:</span> Üstün yeteneklilerin normal karma sınıflarda akranlarıyla bir arada olmasıdır.</li>
+    </ul>
+  </div>
+
+  <div class="card" data-tags="hızlandırma sınıf atlatma erken okula başlama müfredat sıkıştırma">
+    <div class="card-title">⚡ Hızlandırma ve Türleri</div>
+    <p>Eğitim sürecinin normal sürecinden daha erken tamamlanmasıdır.</p>
+    <p>Öğrenciye; Sınıf Atlatma, Erken Okula Başlama, Ders Bazlı Hızlandırma, Müfredat Sıkıştırma ve Üniversiteye Erken Başlama türleriyle uygulanabilir.</p>
+    <div class="warning">
+      Ancak öğrencinin fiziksel ya da sosyal becerileri o yaş grubuna uygun değilse erken başlatma ya da sınıf atlatma yapılamaz.
+    </div>
+  </div>
+
+  <div class="card" data-tags="mentorluk karakter sosyal duygusal gelişim">
+    <div class="card-title">🤝 Mentorluk</div>
+    <p>Sadece akademik veya bilimsel bilgiyi geliştirmeyi hedeflemez; alanında uzman bir profesyonel yardımıyla öğrencinin <strong>iyi karakter gelişimini, sosyal ve duygusal özelliklerini</strong> de desteklemeyi amaçlar.</p>
+  </div>
+
+  <div class="card" data-tags="dikkat özel yetenekli bireyler">
+    <div class="card-title">🎯 Dikkat (Önemli Kavram)</div>
+    <p>Özel yetenekli bireylerde çok güçlüdür.</p>
+    <div class="important">
+      Bireyin bir uyaranı dış dünyadan <strong>seçmesi</strong>, diğer tüm uyaranlardan <strong>ayırt etmesi</strong> ve seçtiği o uyaranı spesifik bir amaç doğrultusunda <strong>kullanabilme becerisidir</strong>.
+    </div>
+  </div>
+
+</div><div class="section" id="sec-kuramcilar">
+  <div class="timeline">
+
+    <div class="tl-item">
+      <div class="tl-date">19. yy — İlk Açıklamalar</div>
+      <div class="tl-content"><strong style="color:var(--accent)">Galton:</strong> Zekâ genetiktir, ölçülebilir. Duyusal süreçlere dayalı. İlk açıklamalar.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-date">1900'ler</div>
+      <div class="tl-content"><strong style="color:var(--accent)">Binet:</strong> Zekâ testlerini geliştirdi. Yaş normlarına dayalı ölçüm.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-date">1900'ler — İstatistikçi</div>
+      <div class="tl-content"><strong style="color:var(--accent)">Spearman:</strong> Çift faktör modeli. G (genel) + S (özel). Korelasyon ile ölçüm.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-date">1920–1980</div>
+      <div class="tl-content"><strong style="color:var(--accent)">Piaget:</strong> Bilişsel gelişim kuramı. Zekâ = bilme yetisi. Özümleme. Biyolojik boyut.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-date">1900'ler</div>
+      <div class="tl-content"><strong style="color:var(--accent)">Thorndike:</strong> Çok boyutlu: Soyut + Pratik + Toplumsal zekâ.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-date">1938 — Analiz & İstatistik</div>
+      <div class="tl-content"><strong style="color:var(--accent)">Thurstone:</strong> 7 bağımsız zihinsel yetenek: sözel anlama, sözel akıcılık, sayılar, kavrama hızı, tümevarımsal muhakeme, görsel-uzamsal algılama, hafıza.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-date">1960'lar</div>
+      <div class="tl-content"><strong style="color:var(--accent)">Guilford:</strong> Zihin yapısı modeli. İçerik, Ürün, İşlemler. Yakınsak ve Iraksak düşünme.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-date">1985</div>
+      <div class="tl-content"><strong style="color:var(--accent)">Sternberg:</strong> Üçlü zekâ kuramı: Analitik + Yaratıcı + Pratik.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-date">1983</div>
+      <div class="tl-content"><strong style="color:var(--accent)">Gardner:</strong> Çoklu zekâ kuramı. Her alanda süper olunmaz. Genetik temel zorunlu.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-date">1978 — Üstün Yetenek</div>
+      <div class="tl-content"><strong style="color:var(--accent)">Renzulli:</strong> Üçlü Halka Modeli. Ortalama Üstü Yetenek + Göreve Bağlılık + Yaratıcılık.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-date">1985 — Üstün Yetenek</div>
+      <div class="tl-content"><strong style="color:var(--accent)">Tannenbaum:</strong> Yıldız Modeli. Genel yetenek tek başına yeterli değil. Motivasyon, azim, dirayet. Katlayıcı (Matthew) etki.</div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-date">Güncel — Türk Akademisyeni</div>
+      <div class="tl-content"><strong style="color:var(--accent)">Uğur Sak:</strong> Bulanık Kuramı. Yatkınlıklar + Etkileşim + Uyaranlar.</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="section" id="sec-modeller">
+
+  <div class="section-title">Renzulli — Üçlü Halka Modeli</div>
+  <div class="model-box">
+    <div class="venn-wrap">
+      <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:0; position:relative;">
+        <div style="display:flex; justify-content:center; width:100%; margin-bottom:-60px;">
+          <div class="venn-circle vc1">Ortalama Üstü<br>Yetenek</div>
+        </div>
+        <div style="display:flex; justify-content:center; gap:20px; position:relative;">
+          <div class="venn-circle vc2" style="margin-top:0">Göreve<br>Bağlılık<br>(Motivasyon)</div>
+          <div class="venn-circle vc3" style="margin-top:0">Yaratıcılık</div>
+        </div>
+      </div>
+    </div>
+    <p style="font-size:0.8rem; color:var(--muted); margin-top:1rem">Üç halkanın kesiştiği nokta = Üstün Yeteneklilik</p>
+  </div>
+
+  <div class="section-title">Spearman — Çift Faktör Modeli</div>
+  <div class="two-col">
+    <div class="card">
+      <div class="card-title">G Faktörü</div>
+      <p>Genel Yetenek — Herkeste bulunan, testlerde ölçülen genel zekâ kapasitesi</p>
+    </div>
+    <div class="card">
+      <div class="card-title">S Faktörü</div>
+      <p>Özel Yetenek — Bireysel farklılıkları açıklayan alana özgü yetenek</p>
+    </div>
+  </div>
+  <div class="card">
+    <div class="important">G ve S birbirini etkiler. Bireysel farklılıklar S faktörüyle açıklanır.</div>
+  </div>
+
+  <div class="section-title">Sternberg — Üçlü Zekâ</div>
+  <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:1rem;">
+    <div class="card" style="text-align:center;">
+      <div style="font-size:2rem; margin-bottom:0.4rem">🔍</div>
+      <div class="card-title" style="justify-content:center">Analitik</div>
+      <p>Analiz etme, değerlendirme, problem çözme</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="font-size:2rem; margin-bottom:0.4rem">💡</div>
+      <div class="card-title" style="justify-content:center">Yaratıcı</div>
+      <p>Özgün ve yeni çözümler üretme</p>
+    </div>
+    <div class="card" style="text-align:center;">
+      <div style="font-size:2rem; margin-bottom:0.4rem">⚙️</div>
+      <div class="card-title" style="justify-content:center">Pratik</div>
+      <p>Günlük yaşama uyum sağlama</p>
+    </div>
+  </div>
+
+  <div class="section-title">Ayrımsal Üstün Yetenek — 5 Şart</div>
+  <div class="card">
+    <ol style="padding-left:1.4rem; font-size:0.87rem; line-height:2; color:#c4bba8">
+      <li>Zekâ bileşeni biyolojik temellere dayanır <em>ama yeterli değildir</em></li>
+      <li>Eğitilmemiş, kendiliğinden ortaya çıkar</li>
+      <li><span class="highlight">En az %10</span> alanda üstünlük</li>
+      <li>Özel bir alanda (müzik, matematik, bahçıvanlık vb.) yetenek</li>
+      <li><span class="highlight">Katalizör</span> gerekli — çevresel tetikleyici veya iç motivasyon</li>
+    </ol>
+  </div>
+
+  <div class="section-title">BİLSEM — 5 Program Aşaması</div>
+  <div style="display:flex; flex-direction:column; gap:0.5rem">
+    <div class="card" style="display:flex; align-items:center; gap:1rem; padding:0.9rem 1.2rem">
+      <span style="font-family:'Playfair Display',serif; font-size:1.6rem; color:var(--accent); min-width:2rem; text-align:center">1</span>
+      <div><strong>Uyum</strong><p style="font-size:0.8rem; color:var(--muted)">Sisteme alışma</p></div>
+    </div>
+    <div class="card" style="display:flex; align-items:center; gap:1rem; padding:0.9rem 1.2rem">
+      <span style="font-family:'Playfair Display',serif; font-size:1.6rem; color:var(--accent); min-width:2rem; text-align:center">2</span>
+      <div><strong>Destek Eğitim</strong><p style="font-size:0.8rem; color:var(--muted)">Tanıma ve adapte olma</p></div>
+    </div>
+    <div class="card" style="display:flex; align-items:center; gap:1rem; padding:0.9rem 1.2rem">
+      <span style="font-family:'Playfair Display',serif; font-size:1.6rem; color:var(--accent); min-width:2rem; text-align:center">3</span>
+      <div><strong>Bireysel Yetenekleri Fark Ettirme</strong><p style="font-size:0.8rem; color:var(--muted)">Geliştirilmesi gereken yetenekleri destekleme</p></div>
+    </div>
+    <div class="card" style="display:flex; align-items:center; gap:1rem; padding:0.9rem 1.2rem">
+      <span style="font-family:'Playfair Display',serif; font-size:1.6rem; color:var(--accent); min-width:2rem; text-align:center">4</span>
+      <div><strong>Özel Yetenekleri Geliştirme</strong><p style="font-size:0.8rem; color:var(--muted)">Bireysel yetenekleri geliştirme ve fark ettirme</p></div>
+    </div>
+    <div class="card" style="display:flex; align-items:center; gap:1rem; padding:0.9rem 1.2rem">
+      <span style="font-family:'Playfair Display',serif; font-size:1.6rem; color:var(--accent); min-width:2rem; text-align:center">5</span>
+      <div><strong>Proje Üretimi ve Yönetimi</strong><p style="font-size:0.8rem; color:var(--muted)">İlgi ve isteklere göre proje hazırlama</p></div>
+    </div>
+  </div>
+
+</div>
+
+<div class="section" id="sec-flashcard">
+  <p style="color:var(--muted); font-size:0.84rem; margin-bottom:1.5rem; text-align:center">Karta tıklayarak cevabı gör 👆</p>
+  <div class="flashcard-grid" id="flashcardGrid"></div>
+</div>
+
+<div class="section" id="sec-quiz">
+  <div class="quiz-container">
+    <div id="quizArea"></div>
+    <div class="quiz-score" id="quizScore">
+      <div class="score-num" id="scoreNum">0/0</div>
+      <p style="color:var(--muted); margin-top:0.5rem">Tebrikler! Quizi tamamladın.</p>
+      <button class="btn" onclick="startQuiz()">🔄 Tekrar Başla</button>
+    </div>
+  </div>
+</div>
+
+<div class="section" id="sec-ozet">
+
+  <div class="section-title">Kuramcılar Karşılaştırma</div>
+  <div style="overflow-x:auto">
+    <table style="width:100%; border-collapse:collapse; font-size:0.82rem">
+      <thead>
+        <tr style="border-bottom: 1px solid var(--border)">
+          <th style="padding:0.7rem; text-align:left; color:var(--accent); font-family:'Playfair Display',serif">Kuramcı</th>
+          <th style="padding:0.7rem; text-align:left; color:var(--accent)">Kuram</th>
+          <th style="padding:0.7rem; text-align:left; color:var(--accent)">Anahtar Kavram</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:0.6rem; color:var(--accent2)">Galton</td><td style="padding:0.6rem; color:#c4bba8">Genetik Zekâ</td><td style="padding:0.6rem; color:#c4bba8">Doğuştan, duyusal süreç</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:0.6rem; color:var(--accent2)">Spearman</td><td style="padding:0.6rem; color:#c4bba8">Çift Faktör</td><td style="padding:0.6rem; color:#c4bba8">G + S, korelasyon</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:0.6rem; color:var(--accent2)">Piaget</td><td style="padding:0.6rem; color:#c4bba8">Bilişsel Gelişim</td><td style="padding:0.6rem; color:#c4bba8">Özümleme, biyolojik boyut</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:0.6rem; color:var(--accent2)">Thorndike</td><td style="padding:0.6rem; color:#c4bba8">Çok Boyutlu</td><td style="padding:0.6rem; color:#c4bba8">Soyut, Pratik, Toplumsal</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:0.6rem; color:var(--accent2)">Thurstone</td><td style="padding:0.6rem; color:#c4bba8">Birincil Zihinsel Yetenekler</td><td style="padding:0.6rem; color:#c4bba8">7 yetenek alanı, hafıza</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:0.6rem; color:var(--accent2)">Guilford</td><td style="padding:0.6rem; color:#c4bba8">Zihin Yapısı</td><td style="padding:0.6rem; color:#c4bba8">Ürün×İçerik×İşlem, ıraksak/yakınsak</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:0.6rem; color:var(--accent2)">Sternberg</td><td style="padding:0.6rem; color:#c4bba8">Üçlü Zekâ</td><td style="padding:0.6rem; color:#c4bba8">Analitik, Yaratıcı, Pratik</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:0.6rem; color:var(--accent2)">Gardner</td><td style="padding:0.6rem; color:#c4bba8">Çoklu Zekâ</td><td style="padding:0.6rem; color:#c4bba8">Her alanda süper olunmaz</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:0.6rem; color:var(--accent2)">Renzulli</td><td style="padding:0.6rem; color:#c4bba8">Üçlü Halka</td><td style="padding:0.6rem; color:#c4bba8">Yetenek+Motivasyon+Yaratıcılık</td></tr>
+        <tr style="border-bottom:1px solid var(--border)"><td style="padding:0.6rem; color:var(--accent2)">Tannenbaum</td><td style="padding:0.6rem; color:#c4bba8">Yıldız Modeli</td><td style="padding:0.6rem; color:#c4bba8">Motivasyon, azim, dirayet</td></tr>
+        <tr><td style="padding:0.6rem; color:var(--accent2)">Uğur Sak</td><td style="padding:0.6rem; color:#c4bba8">Bulanık Kuram</td><td style="padding:0.6rem; color:#c4bba8">Yatkınlık+Etkileşim+Uyaran</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-title" style="margin-top:2rem">Sınav İçin Kritik Noktalar</div>
+  <div class="card">
+    <ul style="font-size:0.87rem; line-height:2; color:#c4bba8">
+      <li>⭐ Renzulli'de göreve bağlılık = <strong>motivasyon</strong></li>
+      <li>⭐ Spearman & Galton örtüşen noktalar çıkabilir</li>
+      <li>⭐ Piaget <strong>önemli</strong> — bilişsel gelişimle birleştir</li>
+      <li>⭐ Dikkat tanımı: seçme + ayırma + kullanma</li>
+      <li>⭐ Katalizör: çevresel tetikleyici (mentör, şans, iç motivasyon)</li>
+      <li>⭐ BİLSEM = okul saatleri <strong>dışında</strong></li>
+      <li>⭐ Tanımlama = 3 aşama (Aday → Grup sınavı → Bireysel)</li>
+      <li>⭐ Hızlandırmada fiziksel/sosyal uygunluk şartı</li>
+      <li>⭐ Mentorluk → akademik DEĞİL, sosyal&duygusal gelişim öncelikli</li>
+      <li>⭐ Genetik materyal = DNA/RNA</li>
+    </ul>
+  </div>
+
+</div>
+
+</main>
+
+<button class="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+
+<script>
+// Navigation
+function show(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('visible'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('sec-' + id).classList.add('visible');
+  event.target.classList.add('active');
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// Progress bar
+window.addEventListener('scroll', () => {
+  const scrolled = document.documentElement.scrollTop;
+  const total = document.documentElement.scrollHeight - window.innerHeight;
+  document.getElementById('progress').style.width = (scrolled / total * 100) + '%';
+});
+
+// Search
+function filterCards() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  document.querySelectorAll('#sec-notlar .card').forEach(card => {
+    const tags = (card.dataset.tags || '').toLowerCase();
+    const text = card.innerText.toLowerCase();
+    card.style.display = (!q || text.includes(q) || tags.includes(q)) ? 'block' : 'none';
+  });
+}
+
+// Flashcards
+const flashcards = [
+  {q: "Renzulli'nin Üçlü Halka Modelindeki 3 bileşen nedir?", a: "1) Ortalama Üstü Yetenek  2) Göreve Bağlılık (Motivasyon)  3) Yaratıcılık. Üçünün kesiştiği yerde üstün yeteneklilik oluşur."},
+  {q: "Spearman'ın çift faktör modelinde G ve S ne anlama gelir?", a: "G = Genel Yetenek (herkeste ortak, testlerle ölçülür). S = Özel Yetenek (bireysel farklılıkları açıklar). G ve S birbirini etkiler."},
+  {q: "Dikkat nasıl tanımlanır?", a: "Bireyin bir uyaranı seçmesi, diğer uyaranlardan ayırması ve belirli bir amaç doğrultusunda kullanması."},
+  {q: "Ayrımsal Üstün Yetenek Kuramı'nda Katalizör ne demektir?", a: "Tepkimeyi başlatacak çevresel şart veya tetikleyici. Mentör, şans veya iç motivasyon olabilir. Çevresel koşullar potansiyeli tetikler."},
+  {q: "BİLSEM'in açılımı ve tanımı nedir?", a: "Bilim ve Sanat Merkezleri. Özel yetenekli bireylerin potansiyelini geliştirmek için okul saatleri dışında destek eğitim veren kurumlar."},
+  {q: "Sternberg'in Üçlü Zekâ Kuramı'nın bileşenleri?", a: "1) Analitik Zekâ: problem anlama, analiz, değerlendirme  2) Yaratıcı Zekâ  3) Pratik Zekâ: günlük yaşama uyum"},
+  {q: "Thurstone hafızayı nasıl ikiye ayırır?", a: "1) Kodlama: bilgiyi hafızaya alma  2) Hatırlama: ihtiyaç anında bilgiyi geri çağırma"},
+  {q: "Özel yetenekli birey nasıl tanımlanır?", a: "Bir ya da birkaç alanda normal gelişim gösteren akranlarına göre üstün performans gösteren ya da gösterme potansiyeli olan birey."},
+  {q: "Tanımlama sürecinin 3 aşaması nelerdir?", a: "1) Aday gösterme (öğretmen formu)  2) Genel tanıma testi (MEB grup sınavı)  3) Bireysel değerlendirme (Genel/Görsel/Müzik)"},
+  {q: "Piaget'ye göre zekâ nedir ve özümleme ne demektir?", a: "Piaget için zekâ = bilme yetisidir, biyolojik ve mantıksal bir süreçtir. Özümleme = yeni bilginin içselleştirilmesidir."},
+  {q: "Galton'ın zekâ anlayışının temel özellikleri nelerdir?", a: "Zekâ doğuştandır, genetiktir ve ölçülebilir. Hızlı duyusal ayırt etme ve duyusal süreçlere dayanır."},
+  {q: "Thorndike zekâyı kaça ayırır?", a: "3'e: Soyut Zekâ, Pratik Zekâ, Toplumsal Zekâ."},
+  {q: "Uğur Sak'ın Bulanık Kuramı'nın 3 özelliği?", a: "1) Yatkınlıklar (muhakeme, zihinsel işlevler)  2) Etkileşim  3) Uyaranlar. Yatkınlıkların ortaya çıkması için uyaran ve etkileşim gerekir."},
+  {q: "BİLSEM'de kayıtlı öğrencilerin geçtiği 5 program aşaması?", a: "1) Uyum  2) Destek Eğitim  3) Bireysel Yetenekleri Fark Ettirme  4) Özel Yetenekleri Geliştirme  5) Proje Üretimi ve Yönetimi"},
+  {q: "Mentorlukta asıl amaç nedir?", a: "Sadece akademik bilgi değil! Sosyal ve duygusal gelişim / iletişim asıl amaçtır."},
+];
+
+function buildFlashcards() {
+  const grid = document.getElementById('flashcardGrid');
+  grid.innerHTML = flashcards.map((fc, i) => `
+    <div class="flashcard" onclick="this.classList.toggle('flipped')">
+      <div class="fc-front">
+        <div class="fc-label">Soru ${i+1} / ${flashcards.length}</div>
+        <div class="fc-question">${fc.q}</div>
+        <div class="fc-hint">tıkla → cevabı gör</div>
+      </div>
+      <div class="fc-back">
+        <div class="fc-label">Cevap</div>
+        <div class="fc-answer">${fc.a}</div>
+      </div>
+    </div>
+  `).join('');
+}
+buildFlashcards();
+
+// Quiz
+const quizData = [
+  {q:"Renzulli'nin Üçlü Halka Modelinde 'göreve bağlılık' hangi kavramla eşanlamlıdır?", opts:["Zekâ","Motivasyon","Yaratıcılık","Özümleme"], ans:1, exp:"Renzulli'nin modelinde göreve bağlılık = motivasyon, azim ve sorumluluk demektir."},
+  {q:"Spearman'ın modelinde bireysel farklılıkları açıklayan faktör hangisidir?", opts:["G faktörü","Genel yetenek","S faktörü","Analitik zekâ"], ans:2, exp:"S (özel yetenek) faktörü bireysel farklılıkları açıklar."},
+  {q:"Aşağıdakilerden hangisi BİLSEM'in tanımına uygundur?", opts:["Okul saatlerinde verilen özel ders","Okul saatleri dışında destek eğitim verilen kurum","Yatılı eğitim merkezi","Özel okul"], ans:1, exp:"BİLSEM, okul saatleri DIŞINDA destek eğitim veren kurumlardır."},
+  {q:"Sternberg'in üçlü zekâ kuramında hangi zekâ türü 'günlük yaşama uyum sağlama' ile ilgilidir?", opts:["Analitik","Yaratıcı","Pratik","Soyut"], ans:2, exp:"Pratik zekâ, günlük yaşama uyum sağlamayı kapsar."},
+  {q:"Piaget'ye göre 'yeni bilginin içselleştirilmesi' hangi kavramla açıklanır?", opts:["Uyum","Özümleme","Kodlama","Katalizör"], ans:1, exp:"Özümleme = bilginin içselleştirilmesi."},
+  {q:"Ayrımsal üstün yetenek kuramına göre yeteneğin ortaya çıkması için gereken minimum üstünlük oranı nedir?", opts:["%5","%10","%20","%25"], ans:1, exp:"En az %10 oranında üstünlük gerekir."},
+  {q:"Thurstone hafızayı nasıl ikiye ayırır?", opts:["Kısa süreli - Uzun süreli","Kodlama - Hatırlama","Anlık - Kalıcı","Görsel - İşitsel"], ans:1, exp:"Thurstone: Kodlama (hafızaya alma) ve Hatırlama (geri çağırma)."},
+  {q:"BİLSEM'de tanımlama sürecinin kaç aşaması vardır?", opts:["2","3","4","5"], ans:1, exp:"3 aşama: Aday Gösterme → Genel Tanıma Testi → Bireysel Değerlendirme."},
+  {q:"Galton'a göre zekânın temel özelliği nedir?", opts:["Öğrenmeyle gelişir","Doğuştandır ve genetiktir","Çevresel faktörlere bağlıdır","Eğitimle şekillenir"], ans:1, exp:"Galton'a göre zekâ doğuştandır, genetiktir ve ölçülebilir."},
+  {q:"Uğur Sak'ın Bulanık Kuramı'nda hangi unsur bulunmaz?", opts:["Yatkınlıklar","Etkileşim","Uyaranlar","Hafıza"], ans:3, exp:"Bulanık Kuramı'nın 3 unsuru: Yatkınlıklar, Etkileşim, Uyaranlar."},
+  {q:"Hızlandırma uygulaması hangi durumda yapılmaz?", opts:["Öğrenci çok zekiyse","Sosyal beceriler yetersizse","Veliler onaylarsa","Sınıf mevcudu uygunsa"], ans:1, exp:"Fiziki durum veya sosyal beceriler uygun değilse sınıf atlama/erken okula başlatma yapılmaz."},
+  {q:"Mentorlukta asıl amaç nedir?", opts:["Sadece akademik başarı","Sınav hazırlığı","Sosyal ve duygusal gelişim","Hızlı öğrenme"], ans:2, exp:"Mentorlukta asıl amaç akademik bilgi değil, sosyal ve duygusal gelişimdir."},
+];
+
+let currentQ = 0, score = 0, answered = [];
+
+function startQuiz() {
+  currentQ = 0; score = 0; answered = [];
+  document.getElementById('quizScore').classList.remove('show');
+  renderQuiz();
+}
+
+function renderQuiz() {
+  if (currentQ >= quizData.length) {
+    document.getElementById('quizArea').innerHTML = '';
+    const sc = document.getElementById('quizScore');
+    sc.classList.add('show');
+    document.getElementById('scoreNum').textContent = score + ' / ' + quizData.length;
+    return;
+  }
+  const d = quizData[currentQ];
+  document.getElementById('quizArea').innerHTML = `
+    <div class="quiz-question">
+      <div class="quiz-q-num">Soru ${currentQ+1} / ${quizData.length}</div>
+      <div class="quiz-q-text">${d.q}</div>
+      <div class="quiz-options">
+        ${d.opts.map((o,i) => `<button class="quiz-option" onclick="answer(${i})">${String.fromCharCode(65+i)}) ${o}</button>`).join('')}
+      </div>
+      <div class="quiz-feedback" id="qFeedback"></div>
+    </div>
+  `;
+}
+
+function answer(idx) {
+  if (answered[currentQ]) return;
+  answered[currentQ] = true;
+  const d = quizData[currentQ];
+  const btns = document.querySelectorAll('.quiz-option');
+  btns.forEach((b,i) => {
+    b.disabled = true;
+    if (i === d.ans) b.classList.add('correct');
+    else if (i === idx && idx !== d.ans) b.classList.add('wrong');
+  });
+  const fb = document.getElementById('qFeedback');
+  if (idx === d.ans) { score++; fb.className='quiz-feedback show ok'; fb.textContent='✓ Doğru! ' + d.exp; }
+  else { fb.className='quiz-feedback show no'; fb.textContent='✗ Yanlış. ' + d.exp; }
+  setTimeout(() => { currentQ++; renderQuiz(); }, 2200);
+}
+
+startQuiz();
+</script>
+</body>
+</html>
